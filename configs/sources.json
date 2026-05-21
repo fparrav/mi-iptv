@@ -17,8 +17,18 @@
       "url": "https://raw.githubusercontent.com/Televito/TDT-Mundo/main/IPTV",
       "enabled": true,
       "priority": 3
+    },
+    {
+      "name": "iptv-org-cl",
+      "url": "https://iptv-org.github.io/iptv/countries/cl.m3u",
+      "enabled": true,
+      "priority": 4
     }
   ],
   "default_country": "CL",
-  "enabled_groups": ["all"]
+  "enabled_groups": ["all"],
+  "epg_urls": [
+    "http://epg/puticastillo.xml",
+    "http://epg/programadorx.xml"
+  ]
 }

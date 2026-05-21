@@ -164,9 +164,9 @@ def deduplicate(channels: list[Channel]) -> list[Channel]:
 
         if key and key in seen:
             duplicates_removed += 1
-            # Keep the one with better metadata
             existing = seen[key]
-            if (ch.tvg_logo and not existing.tvg_logo) or \
+            if (ch.tvg_id and not existing.tvg_id) or \
+               (ch.tvg_logo and not existing.tvg_logo) or \
                (ch.group_title and not existing.group_title):
                 seen[key] = ch
         elif key:
@@ -183,11 +183,14 @@ def normalize_key(name: str) -> str:
     """Create a normalized key for deduplication."""
     if not name:
         return ""
-    # Lowercase, strip special chars, collapse spaces
     key = name.lower().strip()
+    # Strip resolution suffixes: (1080p), (720p), (576i), (2160p), (480p)...
+    key = re.sub(r'\s*\(\d+[ip]\)', '', key)
+    # Strip availability/geo tags: [Not 24/7], [Geo-blocked]
+    key = re.sub(r'\s*\[.*?\]', '', key)
     key = re.sub(r'[^\w\s-]', '', key)
     key = re.sub(r'\s+', ' ', key)
-    return key
+    return key.strip()
 
 
 def filter_channels(
@@ -227,10 +230,13 @@ def sort_channels(channels: list[Channel]) -> list[Channel]:
     ))
 
 
-def write_m3u(channels: list[Channel], output_path: str):
+def write_m3u(channels: list[Channel], output_path: str, epg_urls: list[str] = None):
     """Write channels to an M3U file."""
     with open(output_path, "w", encoding="utf-8") as f:
-        f.write("#EXTM3U\n\n")
+        header = "#EXTM3U"
+        if epg_urls:
+            header += f' url-tvg="{",".join(epg_urls)}"'
+        f.write(header + "\n\n")
         for ch in channels:
             f.write(ch.to_m3u_line() + "\n\n")
 
@@ -252,6 +258,15 @@ def main():
     sources = [s for s in config["sources"] if s.get("enabled", True)]
     default_country = config.get("default_country", "CL")
     enabled_groups = config.get("enabled_groups", ["all"])
+    epg_urls = config.get("epg_urls", [])
+
+    # Load EPG mapping (tvg-name → tvg-id)
+    epg_mapping_path = base_dir / "configs" / "epg-mapping.json"
+    epg_mapping = {}
+    if epg_mapping_path.exists():
+        with open(epg_mapping_path, "r", encoding="utf-8") as f:
+            raw = json.load(f)
+            epg_mapping = {k: v for k, v in raw.items() if not k.startswith("_")}
 
     print(f"=== IPTV Playlist Aggregator ===")
     print(f"Sources: {len(sources)}")
@@ -294,12 +309,22 @@ def main():
     filtered = filter_channels(all_channels, default_country, enabled_groups)
     print(f"After filtering: {len(filtered)}")
 
+    # Apply EPG mapping to channels missing tvg-id
+    mapped = 0
+    for ch in all_channels:
+        if not ch.tvg_id:
+            ch.tvg_id = epg_mapping.get(ch.tvg_name) or epg_mapping.get(ch.name, "")
+            if ch.tvg_id:
+                mapped += 1
+    if mapped:
+        print(f"EPG mapping applied to {mapped} channels")
+
     # Sort
     filtered = sort_channels(filtered)
 
     # Write output
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    write_m3u(filtered, str(output_path))
+    write_m3u(filtered, str(output_path), epg_urls)
     print(f"\nOutput written to: {output_path}")
     print(f"Total channels in playlist: {len(filtered)}")
 
