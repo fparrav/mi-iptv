@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(obsidian create *)",
+      "Bash(obsidian append *)",
+      "Bash(git commit *)",
+      "Bash(obsidian read *)",
+      "Bash(git remote *)",
+      "Bash(git add *)",
+      "Bash(git push *)"
+    ]
+  }
+}

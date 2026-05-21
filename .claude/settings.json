@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '⛔ output/playlist.m3u es generado automáticamente. Edita scripts/update.py o configs/sources.json en su lugar.' && exit 1",
+            "conditions": [{ "path": "output/playlist.m3u" }]
+          }
+        ]
+      }
+    ]
+  }
+}
