@@ -11,7 +11,7 @@ Lista IPTV personalizada agregada de fuentes públicas, con enfoque en canales c
 ## Playlist
 
 La lista generada se encuentra en:
-- **Local (red):** `http://iptv/playlist.m3u` (via CNAME en UDM Pro)
+- **Local (red):** `http://iptv/playlist.m3u` (A record + Traefik)
 - **Remote:** `https://fparrav.github.io/mi-iptv/playlist.m3u`
 
 ## Actualización automática

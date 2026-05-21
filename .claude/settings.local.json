@@ -9,7 +9,10 @@
       "Bash(git add *)",
       "Bash(git push *)",
       "Bash(gh workflow *)",
-      "Bash(git ls-tree *)"
+      "Bash(git ls-tree *)",
+      "Bash(gh run *)",
+      "Bash(iptv)",
+      "Bash(fparrav.github.io)"
     ]
   }
 }
