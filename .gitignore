@@ -1,0 +1,9 @@
+# Claude Code
+.claude/settings.local.json
+.claude/skills/
+.claude/agents/
+
+# Python
+.venv/
+__pycache__/
+*.pyc

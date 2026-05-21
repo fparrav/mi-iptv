@@ -1,0 +1,24 @@
+{
+  "sources": [
+    {
+      "name": "alpox-json-teles",
+      "url": "https://raw.githubusercontent.com/Alplox/json-teles/main/canales.m3u",
+      "enabled": true,
+      "priority": 1
+    },
+    {
+      "name": "m3u.cl",
+      "url": "https://m3u.cl/lista/CL.m3u",
+      "enabled": true,
+      "priority": 2
+    },
+    {
+      "name": "televito-tdt",
+      "url": "https://raw.githubusercontent.com/Televito/TDT-Mundo/main/IPTV",
+      "enabled": true,
+      "priority": 3
+    }
+  ],
+  "default_country": "CL",
+  "enabled_groups": ["all"]
+}
