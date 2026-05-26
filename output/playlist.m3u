@@ -102,9 +102,6 @@ https://unlimited1-cl-isp.dps.live/c9/c9.smil/c9/livestream1/chunks.m3u8
 #EXTINF:-1 tvg-logo="https://i.imgur.com/3a8fiYY.png" group-title="Chile", Canal Latino | SD | La Unión
 https://videostream.chileservidores.com:8081/latina/tracks-v1a1/mono.m3u8
 
-#EXTINF:-1 tvg-name="CHV" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/c/c7/CHV_Noticias_2018.png" group-title="Chile", CHV
-https://redirector.rudo.video/hls-video/10b92cafdf3646cbc1e727f3dc76863621a327fd/chv/chv.smil/playlist.m3u8?PlaylistM3UCL
-
 #EXTINF:-1 tvg-logo="https://i.imgur.com/yjYuZSV.png" group-title="Chile", Click TV | HD | Coronel
 https://v2.tustreaming.cl/clicktv/tracks-v1a1/mono.m3u8
 
@@ -231,17 +228,11 @@ https://dum8zv1rbdjj2.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a
 #EXTINF:-1 tvg-logo="https://i.imgur.com/i2SWwzm.png" group-title="Cine y Cultura Geek", Dreiko TV | HD | Panamá
 https://rtv.fullhd-streaming.com:19360/dreikotv/dreikotv.m3u8
 
-#EXTINF:-1 tvg-logo="https://i.imgur.com/NcWMA8W.png" group-title="Cine y Cultura Geek", Energeek Fan | FHD | Chile
-https://backend.energeek.cl/webtv/egfanweb/index.m3u8?token=dEmoweBeneRGEek2025
-
 #EXTINF:-1 tvg-logo="https://i.imgur.com/mfZIZrC.png" group-title="Cine y Cultura Geek", Energeek Retro | FHD | Chile
 https://cdn.energeek.cl/hls/energeekretro.m3u8
 
 #EXTINF:-1 tvg-logo="https://i.imgur.com/W5hFumt.png" group-title="Cine y Cultura Geek", Ipe | HD | Perú
 https://cdnhd.iblups.com/hls/3f2cb1658d114f2693eff18d83199e6778.m3u8
-
-#EXTINF:-1 tvg-logo="https://i.imgur.com/pqWmos0.png" group-title="Cine y Cultura Geek", Kanade TV | FHD | Chile
-https://backend.energeek.cl/webtv/kanadeweb/index.m3u8?token=deM0kanADeweB
 
 #EXTINF:-1 tvg-logo="https://i.imgur.com/yQ4MLqD.png" group-title="Cine y Cultura Geek", Max Anime | HD | Venezuela
 https://streamlov.alsolnet.com/maxanime/live/playlist.m3u8
@@ -419,9 +410,6 @@ https://open.http.mp.streamamg.com/p/3001560/sp/300156000/playManifest/entryId/0
 
 #EXTINF:-1 tvg-logo="https://i.imgur.com/C2g0Dyh.png" group-title="Deportes", MLB Network | HD | Estados Unidos
 https://fl1.moveonjoy.com/MLB_NETWORK/index.m3u8
-
-#EXTINF:-1 tvg-logo="https://i.imgur.com/kaEmApF.png" group-title="Deportes", Móvil TV Turf | HD | Chile
-https://tvturf4.janus.cl/playlist/stream.m3u8
 
 #EXTINF:-1 tvg-logo="https://i.imgur.com/EIyS8Jx.png" group-title="Deportes", Omán Sports | HD | Omán
 https://partneta.cdn.mgmlcdn.com/omsport/smil:omsport.stream.smil/chunklist.m3u8
@@ -3540,9 +3528,6 @@ https://live.obslivestream.com/makaomux/tracks-v2a1/playlist.m3u8
 #EXTINF:-1 tvg-id="MasMusicaFM.co@SD" tvg-logo="https://i.imgur.com/tCg7owd.png" group-title="Music", MasMusica FM (720p)
 https://movil.ejeserver.com/live/masmusica.m3u8
 
-#EXTINF:-1 tvg-id="MegaBox.ni@SD" tvg-logo="https://i.imgur.com/JqaW7Ei.png" group-title="Music", MegaBox (720p) [Not 24/7]
-https://hdbox.chunklistv.com/live?stream=megabox
-
 #EXTINF:-1 tvg-id="MemoriasdelCorazon.co@SD" tvg-logo="https://i.imgur.com/sVLDzzM.png" group-title="Music", Memorias del Corazon (480p) [Geo-blocked]
 https://video.xtrematv.com:3401/live/grupomemoriaslive.m3u8
 
@@ -3731,9 +3716,6 @@ https://streaming.grupomediosdelnorte.com:19360/tvexitos/tvexitos.m3u8
 
 #EXTINF:-1 tvg-id="TVOMIX.es@HD" tvg-logo="https://ugc.production.linktr.ee/7ef61237-c46d-456b-afe3-a42ef49a979e_Mejorado2.png" group-title="Music", TVOMIX (1080p)
 https://cloud.tvomix.com/TVOMIX/index.m3u8
-
-#EXTINF:-1 tvg-id="TVONENicaragua.ni@SD" tvg-logo="https://i.imgur.com/FNk6rdz.png" group-title="Music", TVONE Nicaragua (720p) [Not 24/7]
-https://hdbox.chunklistv.com/live?stream=tvone
 
 #EXTINF:-1 tvg-id="TVUNO.pe@SD" tvg-logo="https://i.imgur.com/dht94P4.png" group-title="Music", TVUNO (720p)
 https://streamtv.onliv3.online:1936/karibtv/karibtv/playlist.m3u8
@@ -5106,9 +5088,6 @@ https://streamtv.intervenhosting.net:3155/live/juandelacruz3live.m3u8
 #EXTINF:-1 tvg-id="TVUniversalEcuador.ec@SD" tvg-logo="https://i.imgur.com/TIsk5zN.png" group-title="Religious", TV Universal Ecuador (720p)
 https://cdn.mycloudstream.io/hls/live/broadcast/uwcedjt2/index.m3u8
 
-#EXTINF:-1 tvg-id="TV45.ni@SD" tvg-logo="https://i.imgur.com/sI0msrn.png" group-title="Religious", TV45-3ABN Nicaragua (720p) [Not 24/7]
-https://hdbox.chunklistv.com/live?stream=3abn-nicaragua
-
 #EXTINF:-1 tvg-id="TVCa.sv@SD" tvg-logo="https://i.imgur.com/uPWWtCA.png" group-title="Religious", TVCa Televisión Católica Arquidiocesana (720p)
 https://live20.bozztv.com/akamaissh101/ssh101/tvcaelsalvador/playlist.m3u8
 
@@ -5967,23 +5946,11 @@ https://cdn.streamhispanatv.net:3642/live/unicatvlive.m3u8
 #EXTINF:-1 tvg-id="WeatherSpy.mx@SD" tvg-logo="https://i.imgur.com/KIEKOt1.png" group-title="Weather", WeatherSpy (720p)
 https://jukin-weatherspy-2-mx.samsung.wurl.tv/playlist.m3u8
 
-#EXTINF:-1 tvg-name="EnerGeek Fan" tvg-logo="https://cdn.energeek.cl/logos/EG-Fan-2025_brand.png" group-title="animation", EnerGeek Fan (2) [CL]
-https://backend.energeek.cl/webtv/egfanweb/index.m3u8?token=D3m0M3UCLWeb
-
-#EXTINF:-1 tvg-name="EnerGeek Retro" tvg-logo="https://cdn.energeek.cl/logos/EG-Retro-2025_brand.png" group-title="animation", EnerGeek Retro (1) [CL]
-https://backend.energeek.cl/webtv/egretroweb/index.m3u8?token=dEmoweBeneRGEek2025
-
 #EXTINF:-1 tvg-name="EnerGeek Retro" tvg-logo="https://cdn.energeek.cl/logos/EG-Retro-2025_brand.png" group-title="animation", EnerGeek Retro (3) [CL]
 https://backend.energeek.cl/webtv/egretro/mobile/index.m3u8?token=dEmoweBeneRGEek2025
 
-#EXTINF:-1 tvg-name="EnerGeek Retro" tvg-logo="https://cdn.energeek.cl/logos/EG-Retro-2025_brand.png" group-title="animation", EnerGeek Retro (4) [CL]
-https://backend.energeek.cl/webtv/egretroweb/index.m3u8?token=D3m0M3UCLWeb
-
 #EXTINF:-1 tvg-name="Kanade - Televisión" tvg-logo="https://graph.facebook.com/MyKanadeCL/picture?width=800&height=800" group-title="animation", Kanade - Televisión (1) [CL]
 https://streams.kanade.cl/webtv/kanade/mobile/playlist.m3u8?token=deM0kanADeweB
-
-#EXTINF:-1 tvg-name="Kanade - Televisión" tvg-logo="https://graph.facebook.com/MyKanadeCL/picture?width=800&height=800" group-title="animation", Kanade - Televisión (3) [CL]
-https://backend.energeek.cl/webtv/kanadeweb/index.m3u8?token=D3m0M3UCLWeb
 
 #EXTINF:-1 tvg-name="Canal País" tvg-logo="https://graph.facebook.com/CanalPais/picture?width=800&height=800" group-title="business", Canal País (1) [CL]
 https://v4.tustreaming.cl/canalpais/index.m3u8
@@ -6431,12 +6398,6 @@ https://redirector.rudo.video/hls-video/ey6283je82983je9823je8jowowiekldk9838274
 
 #EXTINF:-1 tvg-name="AGRICULTURA TV" tvg-logo="https://graph.facebook.com/RadioAgricultura/picture?width=800&height=800" group-title="music", AGRICULTURA TV (2) [CL]
 https://unlimited2-cl-isp.dps.live/921tv/921tv.smil/playlist.m3u8
-
-#EXTINF:-1 tvg-name="EnerGeek Radio" tvg-logo="https://cdn.energeek.cl/logos/EG-Radio-2025_brand.png" group-title="music", EnerGeek Radio (2) [CL]
-https://backend.energeek.cl/webtv/egradioweb/index.m3u8?token=dEmoweBeneRGEek2025
-
-#EXTINF:-1 tvg-name="EnerGeek Radio" tvg-logo="https://cdn.energeek.cl/logos/EG-Radio-2025_brand.png" group-title="music", EnerGeek Radio (3) [CL]
-https://backend.energeek.cl/webtv/egradioweb/index.m3u8?token=D3m0M3UCLWeb
 
 #EXTINF:-1 tvg-name="International House of Prayer" tvg-logo="https://graph.facebook.com/ihopkc/picture?width=800&height=800" group-title="music", International House of Prayer [US]
 https://storage.sardius.media/archives/-K6FGrVYzVr92SDZiDnc/events/site_68FBe1c2dE/playlist.m3u8
