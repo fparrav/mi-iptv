@@ -153,14 +153,22 @@ def is_placeholder(channel: Channel) -> bool:
     return False
 
 
+def normalize_url(url: str) -> str:
+    """Normalize a stream URL for deduplication (scheme+host+path, no query)."""
+    if not url:
+        return ""
+    parsed = urlparse(url)
+    # Strip query string and fragment; normalize scheme and host to lowercase
+    return f"{parsed.scheme}://{parsed.netloc.lower()}{parsed.path.rstrip('/')}"
+
+
 def deduplicate(channels: list[Channel]) -> list[Channel]:
     """Remove duplicate channels by URL, keeping the best quality entry."""
     seen = {}
     duplicates_removed = 0
 
     for ch in channels:
-        # Deduplicate by normalized URL
-        key = normalize_key(ch.url)
+        key = normalize_url(ch.url)
 
         if key and key in seen:
             duplicates_removed += 1
