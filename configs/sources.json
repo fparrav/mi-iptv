@@ -45,6 +45,15 @@
       "group_title": "Chile",
       "country": "CL",
       "url": "https://redirector.rudo.video/hls-video/10b92cafdf3646cbc1e727f3dc76863621a327fd/chv/chv.smil/playlist.m3u8?PlaylistM3UCL"
+    },
+    {
+      "name": "TurnoEnVivo",
+      "tvg_name": "TurnoEnVivo",
+      "tvg_id": "1666",
+      "tvg_logo": "https://cdn.m3u.cl/logo/1666_TurnoEnVivo.png",
+      "group_title": "Chile",
+      "country": "CL",
+      "url": "https://redirector.dps.live/hls/turno/playlist.m3u8"
     }
   ]
 }

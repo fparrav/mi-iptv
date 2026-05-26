@@ -22,7 +22,7 @@ Single-script pipeline in `scripts/update.py`:
 
 1. **Fetch** — downloads each enabled source from `configs/sources.json` in priority order
 2. **Parse** — `parse_m3u()` converts raw M3U text into `Channel` dataclass instances
-3. **Deduplicate** — `deduplicate()` keeps the entry with richer metadata when names collide
+3. **Deduplicate** — `deduplicate()` deduplicates by URL (scheme+host+path, ignoring query params); keeps the entry with richer metadata when URLs collide
 4. **Filter placeholders** — `is_placeholder()` drops separator/non-channel entries
 5. **Filter by country** — `filter_channels()` keeps channels matching `default_country` (default: `"CL"`) plus channels with no country (grouped as `"Other"`)
 6. **Sort** — by `group_title` then `name`
@@ -46,7 +46,7 @@ Single-script pipeline in `scripts/update.py`:
 
 ### Deduplicación
 
-`normalize_key()` strips resolución y tags antes de comparar: `"TVN (1080p) [Geo-blocked]"` → `"tvn"`. Cuando hay duplicados, gana el entry con más metadata (`tvg-id` > `tvg_logo` > `group_title`). Por esto, iptv-org gana sobre otras fuentes para canales que tienen `tvg-id`.
+`normalize_url()` compara `scheme://host/path` ignorando query strings. `normalize_key()` sigue usándose para nombres en otros contextos: strips resolución y tags — `"TVN (1080p) [Geo-blocked]"` → `"tvn"`. Cuando hay duplicados por URL, gana el entry con más metadata (`tvg-id` > `tvg_logo` > `group_title`). Por esto, iptv-org gana sobre otras fuentes para canales que tienen `tvg-id`.
 
 ## Documentación
 
@@ -54,7 +54,7 @@ Los avances y modificaciones se documentan en el vault de Obsidian (`/Users/feli
 
 ## Deployment
 
-- `output/playlist.m3u` is committed by GitHub Actions (every 6 hours) and served via **GitHub Pages** at `https://fparrav.github.io/iptv/playlist.m3u`
+- `output/playlist.m3u` is committed by GitHub Actions (every 24h) and served via **GitHub Pages** at `https://fparrav.github.io/mi-iptv/output/playlist.m3u`
 - Also reachable locally as `http://iptv/playlist.m3u` via:
   - DNS A record in UDM Pro: `iptv` → `10.0.0.205` (rpi1)
   - Traefik dynamic config in rpi-stack: `traefik/iptv.yml` proxies to GitHub Pages
