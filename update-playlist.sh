@@ -13,7 +13,7 @@ fi
 
 git add output/playlist.m3u
 git commit -m "chore: update IPTV playlist [local]"
+git push origin main
 
 echo ""
-echo "Playlist actualizado y commiteado."
-echo "Para publicar: git push origin main"
+echo "Playlist actualizado, commiteado y publicado."
