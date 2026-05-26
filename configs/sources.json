@@ -35,7 +35,8 @@
   "enabled_groups": ["all"],
   "epg_urls": [
     "http://epg/puticastillo.xml",
-    "http://epg/programadorx.xml"
+    "http://epg/programadorx.xml",
+    "http://epg/iptv-org.xml"
   ],
   "streams": [
     {
