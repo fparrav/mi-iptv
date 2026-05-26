@@ -255,6 +255,7 @@ def main():
     default_country = config.get("default_country", "CL")
     enabled_groups = config.get("enabled_groups", ["all"])
     epg_urls = config.get("epg_urls", [])
+    streams = config.get("streams", [])
 
     # Load EPG mapping (tvg-name → tvg-id)
     epg_mapping_path = base_dir / "configs" / "epg-mapping.json"
@@ -296,6 +297,20 @@ def main():
         all_channels.extend(channels)
 
     print(f"\nTotal channels fetched: {len(all_channels)}")
+
+    # Add individual streams
+    if streams:
+        print(f"\nAdding {len(streams)} streams")
+        for s in streams:
+            ch = Channel(
+                name=s["name"],
+                tvg_name=s.get("tvg_name", s["name"]),
+                tvg_logo=s.get("tvg_logo", ""),
+                group_title=s.get("group_title", ""),
+                country=s.get("country", ""),
+                url=s["url"],
+            )
+            all_channels.append(ch)
 
     # Deduplicate
     all_channels = deduplicate(all_channels)
