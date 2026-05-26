@@ -268,9 +268,13 @@ def main():
             raw = json.load(f)
             epg_mapping = {k: v for k, v in raw.items() if not k.startswith("_")}
 
-    print(f"=== IPTV Playlist Aggregator ===")
-    print(f"Sources: {len(sources)}")
-    print(f"Default country: {default_country}")
+    print(f"{'='*50}")
+    print(f"  IPTV Playlist Aggregator")
+    print(f"{'='*50}")
+    print(f"  Sources:      {len(sources)}")
+    print(f"  Default country: {default_country}")
+    print(f"  EPG URLs:     {epg_urls or 'none'}")
+    print(f"{'='*50}")
     print()
 
     # Fetch and parse all sources
@@ -325,8 +329,10 @@ def main():
     # Write output
     output_path.parent.mkdir(parents=True, exist_ok=True)
     write_m3u(filtered, str(output_path), epg_urls)
-    print(f"\nOutput written to: {output_path}")
-    print(f"Total channels in playlist: {len(filtered)}")
+    print(f"\n{'='*50}")
+    print(f"  Output:  {output_path}")
+    print(f"  Channels: {len(filtered)}")
+    print(f"{'='*50}")
 
 
 if __name__ == "__main__":
