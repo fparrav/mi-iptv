@@ -23,6 +23,12 @@
       "url": "https://iptv-org.github.io/iptv/countries/cl.m3u",
       "enabled": true,
       "priority": 4
+    },
+    {
+      "name": "iptv-org-spa",
+      "url": "https://iptv-org.github.io/iptv/languages/spa.m3u",
+      "enabled": true,
+      "priority": 5
     }
   ],
   "default_country": "CL",
