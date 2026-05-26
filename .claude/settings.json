@@ -8,6 +8,22 @@
             "type": "command",
             "command": "echo '⛔ output/playlist.m3u es generado automáticamente. Edita scripts/update.py o configs/sources.json en su lugar.' && exit 1",
             "conditions": [{ "path": "output/playlist.m3u" }]
+          },
+          {
+            "type": "command",
+            "command": "echo '⛔ .gitignore no editar directamente. Preguntar antes de modificar.' && exit 1",
+            "conditions": [{ "path": ".gitignore" }]
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python scripts/update.py 2>/dev/null && head -3 output/playlist.m3u 2>/dev/null || echo '(script no generó cambios)'"
           }
         ]
       }
