@@ -16,7 +16,7 @@ La lista generada se encuentra en:
 
 ## Actualización automática
 
-El playlist se actualiza cada 6 horas vía GitHub Actions.
+El playlist se actualiza cada 24 horas vía GitHub Actions (cron diario a medianoche UTC). También puede dispararse manualmente desde la pestaña **Actions** de GitHub.
 
 ## Configuración local
 
@@ -35,4 +35,7 @@ Configurar el player IPTV con la URL del playlist.
 
 ## EPG
 
-Soporte EPG pendiente de implementación.
+La playlist generada incluye las URLs de EPG en el header `url-tvg`, consumidas automáticamente por el player IPTV:
+
+- `http://epg/puticastillo.xml`
+- `http://epg/programadorx.xml`
