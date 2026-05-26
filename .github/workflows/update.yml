@@ -1,7 +1,9 @@
 name: Update IPTV Playlist
 
 on:
-  workflow_dispatch:  # Manual trigger only
+  schedule:
+    - cron: '0 0 * * *'  # Every 24h at midnight UTC
+  workflow_dispatch:  # Manual trigger
 
 permissions:
   contents: write

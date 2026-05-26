@@ -48,6 +48,10 @@ Single-script pipeline in `scripts/update.py`:
 
 `normalize_key()` strips resolución y tags antes de comparar: `"TVN (1080p) [Geo-blocked]"` → `"tvn"`. Cuando hay duplicados, gana el entry con más metadata (`tvg-id` > `tvg_logo` > `group_title`). Por esto, iptv-org gana sobre otras fuentes para canales que tienen `tvg-id`.
 
+## Documentación
+
+Los avances y modificaciones se documentan en el vault de Obsidian (`/Users/felipe/Library/Mobile Documents/iCloud~md~obsidian/Documents/MyVault`) según las reglas del `CLAUDE.md` del mismo vault.
+
 ## Deployment
 
 - `output/playlist.m3u` is committed by GitHub Actions (every 6 hours) and served via **GitHub Pages** at `https://fparrav.github.io/iptv/playlist.m3u`
