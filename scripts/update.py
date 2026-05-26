@@ -204,12 +204,8 @@ def filter_channels(
     If a default country is specified, only channels matching that country
     or 'Other' are included.
     """
-    # Assign 'Other' group to channels without a country
-    for ch in channels:
-        if not ch.country:
-            ch.group_title = ch.group_title or "Other"
-            if ch.group_title != "Other":
-                ch.group_title = f"Other ({ch.group_title})"
+    # Do not prefix groups with "Other" for channels without a country
+    # Channels without country pass through unchanged
 
     result = channels
 
