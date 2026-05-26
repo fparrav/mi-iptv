@@ -154,13 +154,13 @@ def is_placeholder(channel: Channel) -> bool:
 
 
 def deduplicate(channels: list[Channel]) -> list[Channel]:
-    """Remove duplicate channels, keeping the best quality entry."""
+    """Remove duplicate channels by URL, keeping the best quality entry."""
     seen = {}
     duplicates_removed = 0
 
     for ch in channels:
-        # Normalize name for dedup
-        key = normalize_key(ch.name)
+        # Deduplicate by normalized URL
+        key = normalize_key(ch.url)
 
         if key and key in seen:
             duplicates_removed += 1
