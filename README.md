@@ -7,6 +7,8 @@ Lista IPTV personalizada agregada de fuentes públicas, con enfoque en canales c
 - [Alpox json-teles](https://github.com/Alplox/json-teles) - M3U con canales de Chile y Latinoamérica
 - [m3u.cl](https://m3u.cl/lista/CL.m3u) - Lista de canales chilenos
 - [Televito TDT-Mundo](https://github.com/Televito/TDT-Mundo) - IPTV de mundo hispanohablante
+- [iptv-org/cl](https://github.com/iptv-org/iptv) - Canales de Chile (M3U público)
+- [iptv-org/spa](https://github.com/iptv-org/iptv) - Canales en español de todo el mundo (M3U público)
 
 ## Playlist
 

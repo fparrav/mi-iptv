@@ -6,6 +6,7 @@ Fetches channels from multiple M3U sources, deduplicates, curates,
 and outputs a single clean M3U playlist.
 """
 
+import hashlib
 import json
 import re
 import sys
@@ -28,6 +29,7 @@ class Channel:
     country: str = ""
     url: str = ""
     original_source: str = ""
+    channel_id: str = ""
 
     def to_m3u_line(self) -> str:
         """Convert channel to M3U EXTINF line."""
@@ -201,6 +203,24 @@ def normalize_key(name: str) -> str:
     return key.strip()
 
 
+def compute_channel_id(ch: Channel, epg_mapping: dict) -> str:
+    """Compute a persistent channel ID from metadata.
+
+    Prioritizes stable IDs from epg-mapping.json (e.g. "0104" for TVN).
+    Otherwise computes SHA-256 hash of normalized name + group_title.
+    """
+    candidate = epg_mapping.get(ch.tvg_name) or epg_mapping.get(ch.name)
+    if candidate:
+        return candidate
+
+    normalized = normalize_key(ch.name) if ch.name else ""
+    group = (ch.group_title or "").strip().lower()
+    key = f"{normalized}|{group}"
+    if not key:
+        key = "__unknown__"
+    return hashlib.sha256(key.encode("utf-8")).hexdigest()[:16]
+
+
 def filter_channels(
     channels: list[Channel],
     country: Optional[str] = None,
@@ -292,9 +312,10 @@ def main():
             continue
 
         channels = parse_m3u(content)
-        # Set source name
+        # Set source name and persistent channel ID
         for ch in channels:
             ch.original_source = source["name"]
+            ch.channel_id = compute_channel_id(ch, epg_mapping)
 
         # Extract country from group titles
         for ch in channels:
@@ -318,6 +339,7 @@ def main():
                 country=s.get("country", ""),
                 url=s["url"],
             )
+            ch.channel_id = compute_channel_id(ch, epg_mapping)
             all_channels.append(ch)
 
     # Deduplicate
