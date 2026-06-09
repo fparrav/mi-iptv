@@ -4,7 +4,7 @@ set -e
 cd "$(dirname "$0")"
 
 EPG_DIR=".epg-tool"
-EPG_SITES="directv.com.ar,movistarplus.es,tv.movistar.co,tv.movistar.com.pe,anteltv.com.uy,cableplus.com.uy,energeek.cl,siba.com.co,reportv.com.ar,nuevosiglo.com.uy"
+EPG_CHANNELS="configs/epg-channels.xml"
 
 if [ ! -d "$EPG_DIR" ]; then
     echo "Clonando iptv-org/epg..."
@@ -16,12 +16,17 @@ if [ ! -d "$EPG_DIR/node_modules" ]; then
     npm install --prefix "$EPG_DIR" --silent
 fi
 
-echo "Generando guide.xml (~10-20 min)..."
-echo "Sitios: $EPG_SITES"
+if [ ! -f "$EPG_CHANNELS" ]; then
+    echo "ERROR: $EPG_CHANNELS no encontrado. Regenerar con scripts/generate-epg-channels.py"
+    exit 1
+fi
+
+CHANNEL_COUNT=$(grep -c "<channel " "$EPG_CHANNELS" 2>/dev/null || echo 0)
+echo "Generando guide.xml (~5-10 min)..."
+echo "Canales: $CHANNEL_COUNT (desde $EPG_CHANNELS)"
 cd "$EPG_DIR"
 npm run grab -- \
-    --sites="$EPG_SITES" \
-    --lang es \
+    --channels="../$EPG_CHANNELS" \
     --output ../output/guide.xml \
     --maxConnections 8 \
     --days 2

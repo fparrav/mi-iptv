@@ -1,0 +1,31 @@
+name: Update EPG Guide
+
+on:
+  schedule:
+    - cron: '0 3 * * *'  # Every 24h at 3am UTC (midnight Chile)
+  workflow_dispatch:  # Manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  update-epg:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Configure git
+        run: |
+          git config --local user.name "GitHub Actions"
+          git config --local user.email "actions@github.com"
+
+      - name: Generate EPG guide
+        run: bash update-epg.sh
