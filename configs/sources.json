@@ -2,7 +2,7 @@
   "sources": [
     {
       "name": "alpox-json-teles",
-      "url": "https://raw.githubusercontent.com/Alplox/json-teles/main/canales.m3u",
+      "url": "https://raw.githubusercontent.com/Alplox/json-teles/refs/heads/main/channels.m3u",
       "enabled": true,
       "priority": 1
     },
