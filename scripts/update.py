@@ -36,7 +36,7 @@ class Channel:
         attrs = []
         if self.tvg_id:
             attrs.append(f'tvg-id="{self.tvg_id}"')
-        if self.tvg_name:
+        if self.tvg_name and not self.tvg_id:
             attrs.append(f'tvg-name="{self.tvg_name}"')
         if self.tvg_logo:
             attrs.append(f'tvg-logo="{self.tvg_logo}"')
@@ -354,15 +354,16 @@ def main():
     filtered = filter_channels(all_channels, default_country, enabled_groups)
     print(f"After filtering: {len(filtered)}")
 
-    # Apply EPG mapping to channels missing tvg-id
-    mapped = 0
+    # Assign stable tvg-id to all channels without one.
+    # channel_id = EPG mapping priority + SHA-256 hash fallback.
+    # Without a tvg-id, UHF falls back to substring name matching for favorites.
+    assigned = 0
     for ch in all_channels:
         if not ch.tvg_id:
-            ch.tvg_id = epg_mapping.get(ch.tvg_name) or epg_mapping.get(ch.name, "")
-            if ch.tvg_id:
-                mapped += 1
-    if mapped:
-        print(f"EPG mapping applied to {mapped} channels")
+            ch.tvg_id = ch.channel_id
+            assigned += 1
+    if assigned:
+        print(f"tvg-id assigned to {assigned} channels (EPG mapping + hash fallback)")
 
     # Sort
     filtered = sort_channels(filtered)
