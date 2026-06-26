@@ -47,6 +47,13 @@ fi
 
 git add output/guide.xml
 git commit -m "chore: update IPTV EPG [local]"
+# Pull --rebase antes del push para evitar race conditions cuando otro
+# workflow (ej. update-tvn-token) hizo push mientras generábamos el EPG.
+if ! git pull --rebase origin main; then
+    git rebase --abort 2>/dev/null || true
+    echo "ERROR: rebase falló — abortando sin push para evitar corrupción"
+    exit 1
+fi
 git push origin main
 
 echo ""
