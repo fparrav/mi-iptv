@@ -38,6 +38,18 @@
     "http://epg/programadorx.xml",
     "http://epg/iptv-org.xml"
   ],
+  "dynamic_streams": [
+    {
+      "name": "tvn-live",
+      "type": "tvn_live",
+      "enabled": true,
+      "tvg_name": "TVN",
+      "tvg_id": "0104",
+      "tvg_logo": "https://upload.wikimedia.org/wikipedia/commons/5/55/Canal_tvn.png",
+      "group_title": "Chile",
+      "country": "CL"
+    }
+  ],
   "streams": [
     {
       "name": "CHV",

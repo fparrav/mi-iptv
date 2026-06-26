@@ -282,6 +282,9 @@ https://jireh-5-hls-video-cl-movistar.dps.live/hls-video/ey6283je82983je9823je8j
 #EXTINF:-1 tvg-id="e7a574a6d04778a7" tvg-logo="https://i.imgur.com/FoCNhh9.png" group-title="Chile", TVM | SD | Los Muermos
 https://stream.skarnetchile.com:19360/canaltvm/canaltvm.m3u8
 
+#EXTINF:-1 tvg-id="0104" tvg-logo="https://upload.wikimedia.org/wikipedia/commons/5/55/Canal_tvn.png" group-title="Chile", TVN
+https://mdstrm.com/live-stream-playlist/57a498c4d7b86d600e5461cb.m3u8?access_token=F7Bg2sTYfZ7FWEts2Xd0PNqMbjQj5m8chCU2cdlqR67qmmt8aNtf3ggTePaEVyvi0o7IplTAwte
+
 #EXTINF:-1 tvg-id="424694c93b9ee760" tvg-logo="https://i.imgur.com/9iwyRJw.png" group-title="Chile", TVO | HD | San Vicente de Tagua Tagua
 https://5ff3d9babae13.streamlock.net/8014/8014/chunklist_w79920185.m3u8
 
@@ -8171,9 +8174,6 @@ https://marine2.miplay.cl/tateti/playlist.m3u8?PlaylistM3UCL
 
 #EXTINF:-1 tvg-id="448" tvg-logo="https://cdn.m3u.cl/logo/448_TVN_24_Horas.png", TVN 24 Horas ✪ | CL
 https://mdstrm.com/live-stream-playlist/689ba606ecfe7915e1f8f741.m3u8?PlaylistM3UCL
-
-#EXTINF:-1 tvg-id="452" tvg-logo="https://cdn.m3u.cl/logo/452_TVN.png", TVN ✪ | CL
-https://mdstrm.com/live-stream-playlist/57a498c4d7b86d600e5461cb.m3u8?PlaylistM3UCL
 
 #EXTINF:-1 tvg-id="340" tvg-logo="https://cdn.m3u.cl/logo/340_TVO_San_Vicente.png", TVO San Vicente | CL
 https://5ff3d9babae13.streamlock.net:443/8014/8014/playlist.m3u8?PlaylistM3UCL

@@ -63,6 +63,71 @@ def fetch_source(url: str, timeout: int = 30) -> Optional[str]:
         return None
 
 
+def fetch_tvn_live(meta: dict) -> Optional["Channel"]:
+    """Fetch TVN's live m3u8 URL by scraping live.tvn.cl for the current access_token.
+
+    TVN hardcodes a long-lived Mediastream access_token in live.tvn.cl. This scraper
+    extracts it so the playlist always has a valid token without needing Playwright.
+    """
+    try:
+        resp = requests.get(
+            "https://live.tvn.cl",
+            timeout=15,
+            headers={
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+                "Referer": "https://www.tvn.cl/en-vivo",
+                "Origin": "https://www.tvn.cl",
+            },
+        )
+        resp.raise_for_status()
+        token_match = re.search(r"access_token:\s*'([^']+)'", resp.text)
+        id_match = re.search(r"id:\s*'([0-9a-f]{24})'", resp.text)
+        if not token_match:
+            print("  [WARN] TVN live: access_token not found in live.tvn.cl")
+            return None
+        token = token_match.group(1)
+        stream_id = id_match.group(1) if id_match else "57a498c4d7b86d600e5461cb"
+        url = f"https://mdstrm.com/live-stream-playlist/{stream_id}.m3u8?access_token={token}"
+        return Channel(
+            name=meta.get("tvg_name", "TVN"),
+            tvg_id=meta.get("tvg_id", ""),
+            tvg_name=meta.get("tvg_name", "TVN"),
+            tvg_logo=meta.get("tvg_logo", ""),
+            group_title=meta.get("group_title", "Chile"),
+            country=meta.get("country", "CL"),
+            url=url,
+        )
+    except requests.RequestException as e:
+        print(f"  [WARN] TVN live scraper failed: {e}")
+        return None
+
+
+DYNAMIC_STREAM_FETCHERS = {
+    "tvn_live": fetch_tvn_live,
+}
+
+
+def fetch_dynamic_streams(dynamic_sources: list) -> list:
+    """Run scraper functions defined in config dynamic_streams."""
+    channels = []
+    for source in dynamic_sources:
+        if not source.get("enabled", True):
+            continue
+        stype = source.get("type", "")
+        fetcher = DYNAMIC_STREAM_FETCHERS.get(stype)
+        if not fetcher:
+            print(f"  [WARN] Unknown dynamic stream type: {stype}")
+            continue
+        print(f"Fetching dynamic: {source['name']} ({stype})")
+        ch = fetcher(source)
+        if ch:
+            channels.append(ch)
+            print(f"  Got: {ch.url[:80]}...")
+        else:
+            print(f"  Skipped (fetch failed)")
+    return channels
+
+
 def parse_m3u(content: str) -> list[Channel]:
     """Parse M3U content into a list of Channel objects."""
     channels = []
@@ -326,6 +391,15 @@ def main():
         all_channels.extend(channels)
 
     print(f"\nTotal channels fetched: {len(all_channels)}")
+
+    # Fetch dynamic streams (scrapers)
+    dynamic_sources = config.get("dynamic_streams", [])
+    if dynamic_sources:
+        print(f"\nDynamic streams: {len(dynamic_sources)}")
+        dynamic_channels = fetch_dynamic_streams(dynamic_sources)
+        for ch in dynamic_channels:
+            ch.channel_id = compute_channel_id(ch, epg_mapping)
+        all_channels.extend(dynamic_channels)
 
     # Add individual streams
     if streams:
