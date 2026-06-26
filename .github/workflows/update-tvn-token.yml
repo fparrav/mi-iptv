@@ -35,15 +35,17 @@ jobs:
           # así que no se puede verificar el token ahí. En su lugar se
           # compara el token del playlist con el de live.tvn.cl y se
           # actualiza si son diferentes.
-          python scripts/update_tvn_token.py --no-verify
-          EXIT_CODE=$?
-          if [ $EXIT_CODE -eq 1 ]; then
+          # || EXIT_CODE=$? evita que set -e aborte el paso cuando el
+          # script sale con exit 1 (token actualizado — no es un error).
+          python scripts/update_tvn_token.py --no-verify || EXIT_CODE=$?
+          EXIT_CODE=${EXIT_CODE:-0}
+          if [ "$EXIT_CODE" -eq 1 ]; then
             echo "token_updated=true" >> $GITHUB_OUTPUT
-          elif [ $EXIT_CODE -eq 0 ]; then
+          elif [ "$EXIT_CODE" -eq 0 ]; then
             echo "token_updated=false" >> $GITHUB_OUTPUT
           else
             echo "::error::update_tvn_token.py falló (exit $EXIT_CODE)"
-            exit $EXIT_CODE
+            exit "$EXIT_CODE"
           fi
 
       - name: Commit and push updated token
