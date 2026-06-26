@@ -18,16 +18,21 @@ echo "[$(date '+%Y-%m-%d %H:%M:%S')] Iniciando actualización IPTV..."
 current_token=$(grep -o 'access_token=[^&[:space:]]*' "$PLAYLIST" | head -1 | sed 's/access_token=//' || echo "")
 stream_id="57a498c4d7b86d600e5461cb"
 
-if [[ -n "$current_token" ]]; then
-    http_code=$($PYTHON -c "
-import requests
+# Validar que el token solo contenga caracteres seguros (base64url + alfanumérico)
+if [[ -n "$current_token" ]] && [[ "$current_token" =~ ^[A-Za-z0-9._-]+$ ]]; then
+    http_code=$(ACCESS_TOKEN="$current_token" STREAM_ID="$stream_id" $PYTHON -c '
+import os, requests
 r = requests.get(
-    'https://mdstrm.com/live-stream-playlist/$stream_id.m3u8?access_token=$current_token',
-    timeout=10, headers={'User-Agent': 'Mozilla/5.0', 'Referer': 'https://live.tvn.cl'}
+    f"https://mdstrm.com/live-stream-playlist/{os.environ[\"STREAM_ID\"]}.m3u8",
+    params={"access_token": os.environ["ACCESS_TOKEN"]},
+    timeout=10, headers={"User-Agent": "Mozilla/5.0", "Referer": "https://live.tvn.cl"}
 )
 print(r.status_code)
-" 2>/dev/null || echo "0")
+' 2>/dev/null || echo "0")
     echo "[INFO] Token TVN actual: HTTP $http_code"
+elif [[ -n "$current_token" ]]; then
+    echo "[WARN] Token extraído contiene caracteres inesperados — omitiendo verificación"
+    http_code="0"
 else
     http_code="0"
     echo "[WARN] No se encontró token TVN en playlist"
