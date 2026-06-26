@@ -1,0 +1,52 @@
+name: Update TVN Token
+
+# Verifica el token de TVN cada 3 horas y lo renueva si expiró.
+# Solo toca output/playlist.m3u — no ejecuta update.py completo
+# (evita el bloqueo 403 de m3u.cl en GitHub Actions).
+
+on:
+  schedule:
+    - cron: '0 */3 * * *'  # Cada 3 horas
+  workflow_dispatch:        # Trigger manual desde GitHub UI
+
+permissions:
+  contents: write
+
+jobs:
+  update-tvn-token:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Check and update TVN token
+        id: check
+        run: |
+          python scripts/update_tvn_token.py
+          EXIT_CODE=$?
+          if [ $EXIT_CODE -eq 1 ]; then
+            echo "token_updated=true" >> $GITHUB_OUTPUT
+          elif [ $EXIT_CODE -eq 0 ]; then
+            echo "token_updated=false" >> $GITHUB_OUTPUT
+          else
+            echo "::error::update_tvn_token.py falló (exit $EXIT_CODE)"
+            exit $EXIT_CODE
+          fi
+
+      - name: Commit and push updated token
+        if: steps.check.outputs.token_updated == 'true'
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add output/playlist.m3u
+          git commit -m "chore: update TVN token [auto]"
+          git push
