@@ -31,7 +31,11 @@ jobs:
       - name: Check and update TVN token
         id: check
         run: |
-          python scripts/update_tvn_token.py
+          # --no-verify: mdstrm.com bloquea IPs de GitHub Actions (403),
+          # así que no se puede verificar el token ahí. En su lugar se
+          # compara el token del playlist con el de live.tvn.cl y se
+          # actualiza si son diferentes.
+          python scripts/update_tvn_token.py --no-verify
           EXIT_CODE=$?
           if [ $EXIT_CODE -eq 1 ]; then
             echo "token_updated=true" >> $GITHUB_OUTPUT

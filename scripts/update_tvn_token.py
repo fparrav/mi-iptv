@@ -2,17 +2,25 @@
 """
 Actualiza SOLO el token de TVN en output/playlist.m3u.
 
-Lógica:
-  1. Verifica si el token actual del playlist sigue funcionando (HTTP check).
-  2. Si da 401/error: scrapea nuevo token de live.tvn.cl, valida y reemplaza.
-  3. Si funciona (200): no modifica el archivo (exit 0, sin output).
+Modos de operación:
+  --verify (default, para uso local):
+    1. Verifica el token actual en mdstrm.com.
+    2. Si da 200: sin cambios (exit 0).
+    3. Si da 401/error: scrapea nuevo token, verifica, reemplaza.
+
+  --no-verify (para GitHub Actions, donde mdstrm.com da 403 por IP):
+    1. Scrapea token de live.tvn.cl.
+    2. Si es diferente al del playlist: reemplaza (exit 1).
+    3. Si es igual: sin cambios (exit 0).
+    El token de live.tvn.cl se asume válido por origen.
 
 Exit codes:
-  0 — no se requieren cambios (token válido)
+  0 — no se requieren cambios
   1 — token actualizado (el llamador debe hacer git commit)
   2 — error irrecuperable
 """
 
+import argparse
 import re
 import sys
 from pathlib import Path
@@ -27,7 +35,6 @@ TVN_URL_RE = re.compile(
     rf"(https://mdstrm\.com/live-stream-playlist/{re.escape(STREAM_ID)}\.m3u8)"
     r"\?access_token=([A-Za-z0-9._-]+)"
 )
-TOKEN_RE = re.compile(r"[A-Za-z0-9._-]+")
 
 HEADERS_SCRAPE = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
@@ -41,7 +48,6 @@ HEADERS_CHECK = {
 
 
 def check_token(token: str) -> int:
-    """Devuelve el HTTP status code al verificar el token en mdstrm."""
     try:
         r = requests.get(
             MDSTRM_BASE,
@@ -55,7 +61,6 @@ def check_token(token: str) -> int:
 
 
 def scrape_token() -> str:
-    """Scrapea el token actual desde live.tvn.cl."""
     resp = requests.get("https://live.tvn.cl", timeout=15, headers=HEADERS_SCRAPE)
     resp.raise_for_status()
     m = re.search(r"access_token:\s*'([A-Za-z0-9._-]+)'", resp.text)
@@ -64,10 +69,21 @@ def scrape_token() -> str:
     return m.group(1)
 
 
+def apply_token(content: str, new_token: str) -> str:
+    return TVN_URL_RE.sub(f"{MDSTRM_BASE}?access_token={new_token}", content)
+
+
 def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--no-verify",
+        action="store_true",
+        help="No verifica el token en mdstrm.com (para GitHub Actions donde da 403)",
+    )
+    args = parser.parse_args()
+
     content = PLAYLIST.read_text()
 
-    # Extraer token actual del playlist
     match = TVN_URL_RE.search(content)
     if not match:
         print("[WARN] URL de TVN no encontrada en playlist.m3u")
@@ -75,42 +91,55 @@ def main() -> int:
 
     current_token = match.group(2)
 
-    # Verificar si el token actual sigue siendo válido
-    status = check_token(current_token)
-    if status == 200:
-        print(f"[OK] Token TVN válido (HTTP 200) — sin cambios")
-        return 0
+    if args.no_verify:
+        # Modo GA: scrapear y actualizar si el token cambió
+        try:
+            new_token = scrape_token()
+        except Exception as e:
+            print(f"[ERROR] No se pudo obtener token de live.tvn.cl: {e}")
+            return 2
 
-    print(f"[INFO] Token TVN: HTTP {status} — obteniendo token nuevo...")
+        if new_token == current_token:
+            print("[OK] Token sin cambios — sin actualización necesaria")
+            return 0
 
-    # Scrapear nuevo token
-    try:
-        new_token = scrape_token()
-    except Exception as e:
-        print(f"[ERROR] No se pudo obtener token de live.tvn.cl: {e}")
-        return 2
+        new_content = apply_token(content, new_token)
+        PLAYLIST.write_text(new_content)
+        print(f"[UPDATED] Token TVN renovado (modo --no-verify)")
+        return 1
 
-    if new_token == current_token:
-        print("[WARN] Nuevo token igual al actual — el stream puede estar caído")
-        return 2
+    else:
+        # Modo local: verificar el token actual primero
+        status = check_token(current_token)
+        if status == 200:
+            print("[OK] Token TVN válido (HTTP 200) — sin cambios")
+            return 0
 
-    # Verificar que el nuevo token funcione
-    new_status = check_token(new_token)
-    if new_status != 200:
-        print(f"[ERROR] Nuevo token rechazado (HTTP {new_status})")
-        return 2
+        print(f"[INFO] Token TVN: HTTP {status} — obteniendo token nuevo...")
 
-    # Reemplazar solo la URL de TVN en el playlist
-    new_url = f"{MDSTRM_BASE}?access_token={new_token}"
-    new_content = TVN_URL_RE.sub(new_url, content)
+        try:
+            new_token = scrape_token()
+        except Exception as e:
+            print(f"[ERROR] No se pudo obtener token de live.tvn.cl: {e}")
+            return 2
 
-    if new_content == content:
-        print("[OK] Sin cambios tras reemplazo")
-        return 0
+        if new_token == current_token:
+            print("[WARN] Nuevo token igual al actual — el stream puede estar caído")
+            return 2
 
-    PLAYLIST.write_text(new_content)
-    print(f"[UPDATED] Token TVN renovado — HTTP {status} → {new_status}")
-    return 1
+        new_status = check_token(new_token)
+        if new_status != 200:
+            print(f"[ERROR] Nuevo token rechazado (HTTP {new_status})")
+            return 2
+
+        new_content = apply_token(content, new_token)
+        if new_content == content:
+            print("[OK] Sin cambios tras reemplazo")
+            return 0
+
+        PLAYLIST.write_text(new_content)
+        print(f"[UPDATED] Token TVN renovado — HTTP {status} → {new_status}")
+        return 1
 
 
 if __name__ == "__main__":
