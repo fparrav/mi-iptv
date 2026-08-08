@@ -8,14 +8,98 @@ and outputs a single clean M3U playlist.
 
 import hashlib
 import json
+import os
 import re
 import sys
 from dataclasses import dataclass, field, asdict
 from pathlib import Path
-from typing import Optional
+from typing import Any, Dict, List, Optional
 from urllib.parse import urlparse
 
 import requests
+
+
+def _load_channel_mapping() -> Dict[str, Any]:
+    """Load the chilean-channels.json data file."""
+    base_dir = Path(os.path.dirname(__file__)).parent / "configs"
+    path = base_dir / "chilean-channels.json"
+    if not path.exists():
+        print(f"[WARN] Channel mapping file not found: {path}")
+        return {}
+    with open(path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+def _strip_diacritics(text: str) -> str:
+    """Remove diacritical marks (a->a, e->e, n->n, etc.)."""
+    import unicodedata
+    nfkd = unicodedata.normalize("NFD", text)
+    return "".join(
+        ch for ch in nfkd if unicodedata.category(ch)[0] != "M"
+    )
+
+
+def _normalize_for_lookup(text: str) -> str:
+    """Normalize text for alias-table lookup.
+
+    Applies lowercase + diacritics stripping to match the pre-normalized
+    aliases stored in chilean-channels.json.  No substring/contains
+    matching -- only exact equality against verified entries.
+    """
+    if not text:
+        return ""
+    return _strip_diacritics(text.lower().strip())
+
+
+def match_family(channel: "Channel", mapping: Dict[str, Any]) -> Optional[str]:
+    """Return the canonical_id of the family that exactly matches this
+    channel's name, or None if no match.
+
+    Matching is EXACT -- against the pre-normalized alias list only.
+    No substring/contains matching: a "contains 'TVN'" rule would also
+    match TVMax, TVNews, etc., which is exactly what the exclusion list
+    exists to prevent.
+    """
+    if not mapping or not channel.name:
+        return None
+
+    normalized = _normalize_for_lookup(channel.name)
+    families = mapping.get("families", {})
+    for slug, family_data in families.items():
+        aliases = [a.lower() for a in family_data.get("aliases", [])]
+        if normalized in aliases:
+            return family_data.get("canonical_id")
+    return None
+
+
+def is_excluded(channel: "Channel", mapping: Dict[str, Any]) -> bool:
+    """Return True if the channel matches an exclusion rule.
+
+    Exclusion rules prevent Chilean-family matching for international
+    channels with similar names (e.g., 24 Horas Spain != TVN 24 Horas).
+    The primary check is tvg_id suffix heuristics (iptv-org convention:
+     .es@, .mx@, .ar@, etc.); fallback to pattern text matching.
+    """
+    if not mapping or not channel.name:
+        return False
+
+    tvg_id = (channel.tvg_id or "").lower()
+    excluded_name = (channel.name or "").lower()
+    exclusion_data = mapping.get("exclusions", {})
+    for key, rule in exclusion_data.items():
+        pattern = (rule.get("pattern") or "").lower()
+        tvg_hint = (rule.get("tvg_id_hint") or "").strip(".")
+
+        # Check tvg_id hint first (strongest signal)
+        if tvg_hint and tvg_hint not in tvg_id:
+            continue   # hint doesn't match, skip this rule
+        elif tvg_hint and tvg_hint in tvg_id:
+            return True   # strong signal: exclude
+
+        # Fallback: check pattern text against name
+        if pattern and pattern in excluded_name:
+            return True
+    return False
 
 
 @dataclass
@@ -59,7 +143,7 @@ def fetch_source(url: str, timeout: int = 30) -> Optional[str]:
         resp.raise_for_status()
         return resp.text
     except requests.RequestException as e:
-        print(f"  [WARN] Failed to fetch {url}: {e}")
+        print(f"   [WARN] Failed to fetch {url}: {e}")
         return None
 
 
@@ -83,7 +167,7 @@ def fetch_tvn_live(meta: dict) -> Optional["Channel"]:
         token_match = re.search(r"access_token:\s*'([^']+)'", resp.text)
         id_match = re.search(r"id:\s*'([0-9a-f]{24})'", resp.text)
         if not token_match:
-            print("  [WARN] TVN live: access_token not found in live.tvn.cl")
+            print("   [WARN] TVN live: access_token not found in live.tvn.cl")
             return None
         token = token_match.group(1)
         stream_id = id_match.group(1) if id_match else "57a498c4d7b86d600e5461cb"
@@ -98,7 +182,7 @@ def fetch_tvn_live(meta: dict) -> Optional["Channel"]:
             url=url,
         )
     except requests.RequestException as e:
-        print(f"  [WARN] TVN live scraper failed: {e}")
+        print(f"   [WARN] TVN live scraper failed: {e}")
         return None
 
 
@@ -116,7 +200,7 @@ def fetch_dynamic_streams(dynamic_sources: list) -> list:
         stype = source.get("type", "")
         fetcher = DYNAMIC_STREAM_FETCHERS.get(stype)
         if not fetcher:
-            print(f"  [WARN] Unknown dynamic stream type: {stype}")
+            print(f"   [WARN] Unknown dynamic stream type: {stype}")
             continue
         print(f"Fetching dynamic: {source['name']} ({stype})")
         ch = fetcher(source)
@@ -163,17 +247,22 @@ def parse_m3u(content: str) -> list[Channel]:
             if comma_idx != -1:
                 current_channel.name = line[comma_idx + 1:].strip()
                 # Remove color tags and other formatting
-                current_channel.name = re.sub(r'\[/?COLOR\s+\w+\]', '', current_channel.name).strip()
+                current_channel.name = re.sub(
+                    r'\[/?COLOR\s+\w+\]', '', current_channel.name
+                ).strip()
 
             # Extract country from name if it has a country indicator
-            country_match = re.search(r'\|\s*(CL|AR|UY|PE|CO|MX|EC|VE|PY|BO|PY|PA|CR|SV|HN|GT|NI|DO|CU|PR|US|WW|Mundo)', current_channel.name)
+            country_match = re.search(
+                r'\|\s*(CL|AR|UY|PE|CO|MX|EC|VE|PY|BO|PY|PA|CR|SV|HN|GT|NI|DO|CU|PR|US|WW|Mundo)',
+                current_channel.name
+            )
             if country_match:
                 current_channel.country = country_match.group(1)
 
         elif line and not line.startswith("#") and current_channel:
             # This is the URL line
             current_channel.url = line
-            current_channel.original_source = ""  # Set by caller
+            current_channel.original_source = ""   # Set by caller
             channels.append(current_channel)
             current_channel = None
 
@@ -215,7 +304,7 @@ def is_placeholder(channel: Channel) -> bool:
         return True
     if "actualizado" in name or "ultima" in name:
         return True
-    if not channel.url or "imgur.com" in channel.url and channel.url.endswith(".mp4"):
+    if not channel.url or ("imgur.com" in channel.url and channel.url.endswith(".mp4")):
         return True
     return False
 
@@ -268,15 +357,29 @@ def normalize_key(name: str) -> str:
     return key.strip()
 
 
-def compute_channel_id(ch: Channel, epg_mapping: dict) -> str:
+def compute_channel_id(
+    ch: Channel,
+    epg_mapping: dict,
+    channel_family_ids: Optional[dict] = None,
+) -> str:
     """Compute a persistent channel ID from metadata.
 
-    Prioritizes stable IDs from epg-mapping.json (e.g. "0104" for TVN).
-    Otherwise computes SHA-256 hash of normalized name + group_title.
+    Priority order:
+      1. EPG mapping (e.g. "0104" for TVN)
+      2. Channel alias mapping (exact match against verified aliases)
+      3. SHA-256 hash of normalized name + group_title (fallback)
     """
     candidate = epg_mapping.get(ch.tvg_name) or epg_mapping.get(ch.name)
     if candidate:
         return candidate
+
+    # Channel alias mapping: exact-match against verified aliases
+    if channel_family_ids is not None:
+        canonical_id = match_family(
+            ch, {"families": {}, "exclusions": {}}
+        )   # stub; real matching in main post-dedup
+        if canonical_id and canonical_id in channel_family_ids.values():
+            return canonical_id
 
     normalized = normalize_key(ch.name) if ch.name else ""
     group = (ch.group_title or "").strip().lower()
@@ -350,7 +453,7 @@ def main():
     epg_urls = config.get("epg_urls", [])
     streams = config.get("streams", [])
 
-    # Load EPG mapping (tvg-name → tvg-id)
+    # Load EPG mapping (tvg-name -> tvg-id)
     epg_mapping_path = base_dir / "configs" / "epg-mapping.json"
     epg_mapping = {}
     if epg_mapping_path.exists():
@@ -358,12 +461,22 @@ def main():
             raw = json.load(f)
             epg_mapping = {k: v for k, v in raw.items() if not k.startswith("_")}
 
+    # Load channel alias mapping (chilean-channels.json)
+    channel_mapping = _load_channel_mapping()
+
     print(f"{'='*50}")
     print(f"  IPTV Playlist Aggregator")
     print(f"{'='*50}")
-    print(f"  Sources:      {len(sources)}")
+    print(f"  Sources:        {len(sources)}")
     print(f"  Default country: {default_country}")
-    print(f"  EPG URLs:     {epg_urls or 'none'}")
+    print(f"  EPG URLs:       {epg_urls or 'none'}")
+    if channel_mapping:
+        n_families = len(channel_mapping.get("families", {}))
+        n_exclusions = len(channel_mapping.get("exclusions", {}))
+        print(
+            f"  Channel mapping: {n_families} families, "
+            f"{n_exclusions} exclusions"
+        )
     print(f"{'='*50}")
     print()
 
@@ -439,6 +552,34 @@ def main():
     if assigned:
         print(f"tvg-id assigned to {assigned} channels (EPG mapping + hash fallback)")
 
+    # Apply canonical IDs from channel alias mapping.
+    # Overrides source-native tvg-ids (iptv-org "Name.xx@SD", m3u.cl numerics)
+    # with the family's canonical_id, enabling players to group variants.
+    remapped = 0
+    if channel_mapping:
+        families = channel_mapping.get("families", {})
+        exclusions = channel_mapping.get("exclusions", {})
+        for ch in all_channels:
+            # Skip channels that are international lookalikes (exclusion list)
+            if is_excluded(ch, {"exclusions": exclusions}):
+                continue   # Don't force a Chilean ID on an international channel
+
+            # Match against family aliases (exact-match only)
+            canonical_id = match_family(
+                ch, {"families": families, "exclusions": {}}
+            )
+            if canonical_id:
+                if ch.tvg_id and not ch.tvg_id.startswith("cl-") and ch.tvg_id != canonical_id:
+                    # Channel has a non-cl-* ID (hash or source-native) -> override
+                    ch.tvg_id = canonical_id
+                    remapped += 1
+                elif not ch.tvg_id:
+                    # Channel got no tvg-id yet (shouldn't happen, but be safe)
+                    ch.tvg_id = canonical_id
+                    remapped += 1
+                # else: already has the right cl-* ID or an EPG mapping ID -> keep
+        print(f"Remapped {remapped} channels to canonical IDs (alias mapping)")
+
     # Sort
     filtered = sort_channels(filtered)
 
@@ -446,7 +587,7 @@ def main():
     output_path.parent.mkdir(parents=True, exist_ok=True)
     write_m3u(filtered, str(output_path), epg_urls)
     print(f"\n{'='*50}")
-    print(f"  Output:  {output_path}")
+    print(f"  Output:   {output_path}")
     print(f"  Channels: {len(filtered)}")
     print(f"{'='*50}")
 

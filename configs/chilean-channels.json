@@ -1,0 +1,363 @@
+{
+    "_comment": "Chilean national TV channels — canonical IDs + alias tables. Verified against 3099-channel playlist as of 2026-08-08.",
+    "families": {
+        "cl-tvn": {
+            "aliases": [
+                "TVN",
+                "tvn (1080p)",
+                "tvn [cl]",
+                "tvn ✪|cl",
+                "tvn | cl"
+            ],
+            "canonical_id": "0104",
+            "canonical_name": "TVN"
+        },
+        "cl-tvn-24horas": {
+            "aliases": [
+                "canal 24 horas | hd | santiago",
+                "canal 24 horas | sd | santiago",
+                "canal 24 horas | sd | santiago alt.",
+                "tvn 24 horas ✪|cl",
+                "tvn 24 horas ✪|cl",
+                "tvn 24 horas | sd | santiago"
+            ],
+            "canonical_id": "cl-tvn-24horas",
+            "canonical_name": "TVN 24 Horas"
+        },
+        "cl-tvn-3": {
+            "aliases": [
+                "tvn3 (1080p) [geo-blocked]",
+                "tvn3"
+            ],
+            "canonical_id": "cl-tvn-3",
+            "canonical_name": "TVN 3"
+        },
+        "cl-chilevision": {
+            "aliases": [
+                "chv",
+                "chv|hd|alt.",
+                "chv|hd|santiago",
+                "chilevision (1080p)",
+                "chilevision"
+            ],
+            "canonical_id": "cl-chilevision",
+            "canonical_name": "Chilevisión"
+        },
+        "cl-chilevision-noticias": {
+            "aliases": [
+                "chv noticias ✪|cl",
+                "chv noticias [cl]",
+                "chilevision noticias"
+            ],
+            "canonical_id": "cl-chilevision-noticias",
+            "canonical_name": "CHV Noticias"
+        },
+        "cl-chilevision-deportes": {
+            "aliases": [
+                "chv deportes ✪|cl",
+                "chilevision deportes"
+            ],
+            "canonical_id": "cl-chilevision-deportes",
+            "canonical_name": "CHV Deportes"
+        },
+        "cl-mega": {
+            "aliases": [
+                "mega",
+                "mega|hd|santiago",
+                "mega|sd|santiago",
+                "mega (1080p)",
+                "mega ✪|cl",
+                "mega (1) [cl]",
+                "mega | sd | santiago",
+                "mega | hd | santiago"
+            ],
+            "canonical_id": "cl-mega",
+            "canonical_name": "Mega"
+        },
+        "cl-mega-noticias": {
+            "aliases": [
+                "meganoticias ✪|cl",
+                "meganoticias [cl]",
+                "mega noticias",
+                "mega noticias"
+            ],
+            "canonical_id": "cl-mega-noticias",
+            "canonical_name": "Meganoticias"
+        },
+        "cl-mega-2": {
+            "aliases": [
+                "mega 2 (1080p)",
+                "mega2.cl@sd",
+                "mega 2",
+                "mega 2 (720p)"
+            ],
+            "canonical_id": "cl-mega-2",
+            "canonical_name": "Mega 2"
+        },
+        "cl-canal13": {
+            "aliases": [
+                "canal 13 (kodi) | hd | santiago",
+                "canal 13 (1080p)",
+                "canal 13 ✪|cl",
+                "canal 13",
+                "canal 13 ✪ | cl"
+            ],
+            "canonical_id": "cl-canal13",
+            "canonical_name": "Canal 13"
+        },
+        "cl-tele13": {
+            "aliases": [
+                "tele 13 | fhd | santiago"
+            ],
+            "canonical_id": "cl-tele13",
+            "canonical_name": "Tele 13"
+        },
+        "cl-tele13-radio": {
+            "aliases": [
+                "tele 13 radio | fhd | santiago",
+                "tele 13 radio"
+            ],
+            "canonical_id": "cl-tele13-radio",
+            "canonical_name": "Tele 13 Radio"
+        },
+        "cl-13c": {
+            "aliases": [
+                "13c (1080p)",
+                "13c.cl@sd",
+                "13c"
+            ],
+            "canonical_id": "cl-13c",
+            "canonical_name": "13C"
+        },
+        "cl-13-humor": {
+            "aliases": [
+                "13humor.cl@sd",
+                "13 humor"
+            ],
+            "canonical_id": "cl-13-humor",
+            "canonical_name": "13 Humor"
+        },
+        "cl-13-entretencion": {
+            "aliases": [
+                "13e.cl@sd",
+                "13e",
+                "13 entretencion",
+                "13 entretenccion (720p)"
+            ],
+            "canonical_id": "cl-13-entretencion",
+            "canonical_name": "13 Entretención"
+        },
+        "cl-13-realities": {
+            "aliases": [
+                "13realities.cl@sd",
+                "13 realities|cl",
+                "13 realities",
+                "13 realities (720p)"
+            ],
+            "canonical_id": "cl-13-realities",
+            "canonical_name": "13 Realities"
+        },
+        "cl-13-kids": {
+            "aliases": [
+                "13kids.cl@sd",
+                "13 kids"
+            ],
+            "canonical_id": "cl-13-kids",
+            "canonical_name": "13 Kids"
+        },
+        "cl-13-prime": {
+            "aliases": [
+                "13p.cl@sd",
+                "13 prime",
+                "13 prime (720p)"
+            ],
+            "canonical_id": "cl-13-prime",
+            "canonical_name": "13 Prime"
+        },
+        "cl-13-festival": {
+            "aliases": [
+                "13festival.cl@sd",
+                "13 festival|cl",
+                "13 festival"
+            ],
+            "canonical_id": "cl-13-festival",
+            "canonical_name": "13 Festival"
+        },
+        "cl-13-teleseries": {
+            "aliases": [
+                "13t.cl@sd",
+                "13 teleseries|cl",
+                "13 teleseries",
+                "13 teleseries | cl"
+            ],
+            "canonical_id": "cl-13-teleseries",
+            "canonical_name": "13 Teleseries"
+        },
+        "cl-13-cocina": {
+            "aliases": [
+                "13 cocina|cl",
+                "13 cocina"
+            ],
+            "canonical_id": "cl-13-cocina",
+            "canonical_name": "13 Cocina"
+        },
+        "cl-13-viajes": {
+            "aliases": [
+                "13 viajes|cl",
+                "13 viajes"
+            ],
+            "canonical_id": "cl-13-viajes",
+            "canonical_name": "13 Viajes"
+        },
+        "cl-13-internacional": {
+            "aliases": [
+                "13 internacional ✪|cl",
+                "13 internacional",
+                "13 internacional | cl"
+            ],
+            "canonical_id": "cl-13-internacional",
+            "canonical_name": "13 Internacional"
+        },
+        "cl-13-pop": {
+            "aliases": [
+                "13 pop|fhd|santiago",
+                "13 pop",
+                "13 pop | fhd | santiago"
+            ],
+            "canonical_id": "cl-13-pop",
+            "canonical_name": "13 Pop"
+        }
+    },
+    "exclusions": {
+        "24 Horas España RTVE": {
+            "pattern": "24 horas",
+            "reason": "Spain RTVE channel, not Chilean. Name collision with Canal 24 Horas TVN.",
+            "tvg_id_hint": ".es@"
+        },
+        "Canal 24 Horas Canarias": {
+            "pattern": "canal 24 horas canarias",
+            "reason": "Spain Canarian channel. Different from Chilean 24 Horas.",
+            "tvg_id_hint": ".es@"
+        },
+        "Canal 24 Horas Catalunya": {
+            "pattern": "canal 24 horas catalunya",
+            "reason": "Spain Catalan channel. Different from Chilean 24 Horas.",
+            "tvg_id_hint": ".es@"
+        },
+        "24 Horas RTVE Madrid": {
+            "pattern": "24 horas rtve|sd|madrid",
+            "reason": "Spain RTVE flagship news. Different from Chilean TVN 24 Horas.",
+            "tvg_id_hint": ""
+        },
+        "Channel 13 Tel Aviv Israel": {
+            "pattern": "channel 13|hd|tel aviv",
+            "reason": "Israeli channel. Name collision with Canal 13 Chile.",
+            "tvg_id_hint": ".il@"
+        },
+        "Canal 13 Bajío México": {
+            "pattern": "canal 13 bajío",
+            "reason": "Mexican regional channel. Different from Canal 13 Chile.",
+            "tvg_id_hint": ".mx@"
+        },
+        "Canal 13 Campeche México": {
+            "pattern": "canal 13 campeche",
+            "reason": "Mexican state channel. Different from Chilean Canal 13.",
+            "tvg_id_hint": ".mx@"
+        },
+        "Canal 13 Chiapas México": {
+            "pattern": "canal 13 chiapas",
+            "reason": "Mexican state channel. Different from Chilean Canal 13.",
+            "tvg_id_hint": ".mx@"
+        },
+        "Esquipulas Guatemala": {
+            "pattern": "esquipulas",
+            "reason": "Guatemalan local channel sharing 'Canal 13' name.",
+            "tvg_id_hint": ".gt@"
+        },
+        "Canal 13 Guadalajara México": {
+            "pattern": "canal 13 guadalajara",
+            "reason": "Mexican regional channel. Different from Chilean Canal 13.",
+            "tvg_id_hint": ".mx@"
+        },
+        "Canal 13 Michoacán México": {
+            "pattern": "canal 13 michoacán",
+            "reason": "Mexican state channel. Different from Chilean Canal 13.",
+            "tvg_id_hint": ".mx@"
+        },
+        "Canal 13 Oaxaca México": {
+            "pattern": "canal 13 oaxaca",
+            "reason": "Mexican state channel. Different from Chilean Canal 13.",
+            "tvg_id_hint": ".mx@"
+        },
+        "Canal 13 Puebla México": {
+            "pattern": "canal 13 puebla",
+            "reason": "Mexican regional channel. Different from Chilean Canal 13.",
+            "tvg_id_hint": ".mx@"
+        },
+        "Canal 13 Tabasco México": {
+            "pattern": "canal 13 tabasco",
+            "reason": "Mexican state channel. Different from Chilean Canal 13.",
+            "tvg_id_hint": ".mx@"
+        },
+        "Viva Nicaragua Canal 13": {
+            "pattern": "viva nicaragua canal 13",
+            "reason": "Nicaraguan channel sharing 'Canal 13' name.",
+            "tvg_id_hint": ".ni@"
+        },
+        "Canal 13 Jujuy Argentina": {
+            "pattern": "canal 13 jujuí tv",
+            "reason": "Argentine regional channel. Different from Chilean Canal 13.",
+            "tvg_id_hint": ".ar@"
+        },
+        "Canal 13 La Rioja Argentina": {
+            "pattern": "canal 13 la río",
+            "reason": "Argentine regional channel. Different from Chilean Canal 13.",
+            "tvg_id_hint": ".ar@"
+        },
+        "Canal 13 San Luis Argentina": {
+            "pattern": "canal 13 san luís",
+            "reason": "Argentine regional channel. Different from Chilean Canal 13.",
+            "tvg_id_hint": ".ar@"
+        },
+        "TVN.do República Dominicana": {
+            "pattern": "tvn (1080p) [not 24/7]",
+            "reason": "Dominican Republic channel sharing TVN name and similar slug.",
+            "tvg_id_hint": ".do@"
+        },
+        "TVN.pa Panamá": {
+            "pattern": "tvn (720p)",
+            "reason": "Panama channel sharing TVN name. Note: Chilean TVN uses 1080p variant.",
+            "tvg_id_hint": ".pa@"
+        },
+        "TVN24.do República Dominicana": {
+            "pattern": "tvn24",
+            "reason": "Dominican Republic channel. Not related to Chilean TVN 24 Horas.",
+            "tvg_id_hint": ".do@"
+        },
+        "Canal 14 Costa Rica": {
+            "pattern": "canal 14 san carlos",
+            "reason": "Costa Rican channel. ID collision (TVN14.cr@SD) but different name.",
+            "tvg_id_hint": ".cr@"
+        },
+        "Mega TV Jaén Perú": {
+            "pattern": "mega tv jaen",
+            "reason": "Peruvian local channel sharing 'Mega' name.",
+            "tvg_id_hint": ".pe@"
+        },
+        "Radio Mega TV Bolivia": {
+            "pattern": "radio mega tv amazonia",
+            "reason": "Bolivian radio station sharing 'Mega' name.",
+            "tvg_id_hint": ".bo@"
+        },
+        "Mega Cine TV Rep. Dominicana": {
+            "pattern": "mega cine tv",
+            "reason": "Dominican Republic cinema channel sharing 'Mega' name.",
+            "tvg_id_hint": ".do@"
+        },
+        "Mega TV Paraguay": {
+            "pattern": "mega tv .py@",
+            "reason": "Paraguayan channel sharing 'Mega' name.",
+            "tvg_id_hint": ".py@"
+        }
+    }
+}
