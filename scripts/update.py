@@ -48,7 +48,10 @@ def _normalize_for_lookup(text: str) -> str:
     """
     if not text:
         return ""
-    return _strip_diacritics(text.lower().strip())
+    normalized = _strip_diacritics(text.lower().strip())
+    # Strip spaces around pipes: pipe normalization in _normalize_for_lookup
+    normalized = re.sub(r'\s*\|\s*', '|', normalized)
+    return normalized
 
 
 def match_family(channel: "Channel", mapping: Dict[str, Any]) -> Optional[str]:
