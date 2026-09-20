@@ -69,7 +69,7 @@ def match_family(channel: "Channel", mapping: Dict[str, Any]) -> Optional[str]:
     normalized = _normalize_for_lookup(channel.name)
     families = mapping.get("families", {})
     for slug, family_data in families.items():
-        aliases = [a.lower() for a in family_data.get("aliases", [])]
+        aliases = [_normalize_for_lookup(a) for a in family_data.get("aliases", [])]
         if normalized in aliases:
             return family_data.get("canonical_id")
     return None
